@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title New Tec Build's
+    link(rel='stylesheet', href='style.css')
+    link(rel="shortcut icon" href="logo.png" type="image/x-icon")
+
+  body
+    include ../templates/head
+
+    div(style="width: 40%; margin: auto;")
+      p.main-text-title-huge(style="text-align: center;") - Contact -
+      hr(style="width: 50%;")
+
+      p.main-text-title(style="text-align: center;") - Feel free to contact me -
+      p.main-text(style="opacity: 0.5;") <b>Note:</b> when you click the send button, the website might freeze, but thats ok. The reason for the freeze, is it is sending the message to me.
+      form(action="/contact", method="post")
+        input.inputs(placeholder="First Name", name="first_name")
+        br
+        input.inputs(placeholder="Last Name", name="last_name")
+        br
+        input.inputs(placeholder="Email", type="email", name="email")
+        br
+        textarea.inputs(placeholder="Message", style="width: 100%; height: 200px;", name="message")
+        br
+        button.nav-link-button(style="margin: 10px;", type="submit") Send
+
+    include ../templates/footer

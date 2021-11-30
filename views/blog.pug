@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title New Tec Build's
+    link(rel='stylesheet', href='style.css')
+    link(rel="shortcut icon" href="logo.png" type="image/x-icon")
+
+  body
+    include ../templates/head
+
+    p.main-text-title-huge(style="text-align: center;") - Blog -
+    hr(style="width: 50%;")
+
+    each post in posts
+      div.blog-post-card(onclick=`window.open('/${post.link}')`)
+        p.card-main-text-title-big=post.title
+        p.card-main-text=post.main
+        p.card-footer-text=post.footer
+        p.card-author-text=post.author
+
+
+    include ../templates/footer
