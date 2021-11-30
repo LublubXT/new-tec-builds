@@ -1,12 +1,29 @@
 const express = require('express');
 const app = express();
 const jsonfile = require('jsonfile')
+const mongoose = require('mongoose');
 
 const file = "./public/data.json"
 
 const style = './public/style.css'
 
 var authorized = false;
+
+const Schema = mongoose.Schema;
+
+const data_base = "mongodb+srv://lublub:ilovedata@cluster0.zoktl.mongodb.net/messages?retryWrites=true&w=majority";
+
+mongoose.connect(data_base, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const messageSchema = new mongoose.Schema({
+    firstName: String,
+    lastName: String,
+    message: String,
+    email: String
+});
+
+const Message = new mongoose.model("Message", messageSchema);
+
 
 var bodyParser = require('body-parser')
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -60,7 +77,14 @@ app.get('/blog-post1', (req, res) => {
 
 app.get('/top-secret', (req, res) => {
     if (authorized == true) {
-        res.render('top-secret');
+        Message.find({}, function(err, foundMessages) {
+            if (err) {
+                console.log(err);
+            } else if (foundMessages) {
+                console.log(foundMessages)
+                res.render('top-secret', { messages: foundMessages });
+            }
+        })
     } else {
         res.redirect('/')
     }
@@ -90,14 +114,21 @@ app.post('/contact', (req, res) => {
     const last_name = req.body.last_name;
     const message = req.body.message;
 
-    var data = {
-        firstName: first_name,
-        lastName: last_name,
+    const newMessage = new Message({
         email: email,
+        lastName: last_name,
+        firstName: first_name,
         message: message
-    }
+    });
 
-    res.redirect('/contact')
+    newMessage.save(function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Sent Message");
+            res.redirect("/contact");
+        }
+    });
 });
 
 
